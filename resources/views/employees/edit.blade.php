@@ -5,10 +5,10 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Company edit') }}</div>
+                    <div class="card-header">{{ __('Employee edit') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('companies.update', $company) }}">
+                        <form method="POST" action="{{ route('employees.update', $employee) }}">
                             @method('PUT')
                             @csrf
 
@@ -20,7 +20,7 @@
                                            type="text"
                                            class="form-control @error('name') is-invalid @enderror"
                                            name="name"
-                                           value="{{ $company->name }}"
+                                           value="{{ $employee->name }}"
                                            required
                                            autocomplete="name"
                                            autofocus>
@@ -41,7 +41,7 @@
                                            type="email"
                                            class="form-control @error('email') is-invalid @enderror"
                                            name="email"
-                                           value="{{ $company->email }}"
+                                           value="{{ $employee->email }}"
                                            required
                                            autocomplete="email">
 
@@ -54,16 +54,16 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
+                                <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Phone') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="address"
+                                    <input id="phone"
                                            type="text"
-                                           class="form-control @error('address') is-invalid @enderror"
-                                           name="address"
-                                           value="{{ $company->address }}">
+                                           class="form-control @error('phone') is-invalid @enderror"
+                                           name="phone"
+                                           value="{{ $employee->phone }}">
 
-                                    @error('address')
+                                    @error('phone')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -72,13 +72,21 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="logo-company" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
+                                <label for="company_id" class="col-md-4 col-form-label text-md-right">{{ __('Company Id') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="logo-company"
-                                           type="file"
-                                           class="form-control-file"
-                                           name="logo">
+                                    <input id="company_id"
+                                           type="text"
+                                           class="form-control @error('company_id') is-invalid @enderror"
+                                           name="company_id"
+                                           readonly
+                                           value="{{ $employee->company_id }}">
+
+                                    @error('company_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -90,49 +98,6 @@
                                 </div>
                             </div>
                         </form>
-
-
-                        <hr>
-                        <h2>Employees</h2>
-                        <a href="{{ route('employees.create', ['company_id' => $company->id]) }}" class="btn btn-success">{{ __('Add employee') }}</a>
-
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($company->employees as $employee)
-                                <tr>
-                                    <th scope="row">{{ $employee->id }}</th>
-                                    <td><a href="{{ route('employees.show', $employee) }}">{{ $employee->name }}</a></td>
-                                    <td>{{ $employee->email }}</td>
-                                    <td>{{ $employee->phone }}</td>
-                                    <td>
-                                        <a class="btn btn-secondary" href="{{ route('employees.edit', $employee) }}">Edit</a>
-
-                                        <form id=destroyCompany action="{{ route('employees.destroy', $employee) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-
-                            @if (!$company->employees)
-                                <tr>
-                                    <th scope="row" colspan="5">Employees not found!</th>
-                                </tr>
-                            @endif
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

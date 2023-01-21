@@ -15,10 +15,10 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::paginate(10);
+
         return view('companies.index', compact([
             'companies'
         ]));
-//        dd('/companies/index', $companies);
     }
 
     /**
@@ -28,7 +28,6 @@ class CompanyController extends Controller
      */
     public function create()
     {
-//        dd('/photos/create');
         return view('companies.create');
     }
 

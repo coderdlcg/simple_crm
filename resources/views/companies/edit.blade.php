@@ -63,7 +63,7 @@
                                            name="address"
                                            value="{{ $company->address }}">
 
-                                    @error('password')
+                                    @error('address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

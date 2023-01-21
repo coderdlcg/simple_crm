@@ -12,13 +12,23 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::paginate(10);
+        $companies = Company::all();
 
-        return view('companies.index', compact([
-            'companies'
-        ]));
+        if ($request->ajax()) {
+            $token = csrf_token();
+
+            return datatables()->of($companies)
+                ->addColumn('action', function ($row) use ($token) {
+                    $html = '<a href="companies/'.$row->id.'" class="btn btn-xs btn-secondary">Show</a> ';
+                    $html .= '<a href="companies/'.$row->id.'/edit" class="btn btn-xs btn-secondary">Edit</a> ';
+                    $html .= '<a href="#" id="destroy-item-'.$row->id.'" data-url="companies/'.$row->id.'" data-token="'.$token.'" class="btn btn-xs btn-danger" onclick="destroyItem('.$row->id.')">Del</a>';
+                    return $html;
+                })->toJson();
+        }
+
+        return view('companies.index');
     }
 
     /**

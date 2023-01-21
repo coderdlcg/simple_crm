@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Employee;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends Controller
 {
@@ -12,13 +13,26 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::paginate(10);
+        $employees = Employee::all();
 
-        return view('employees.index', compact([
-            'employees'
-        ]));
+        if ($request->ajax()) {
+            $token = csrf_token();
+
+            return datatables()->of($employees)
+                ->addColumn('company', function ($row) {
+                    return $row->company->name;
+                })
+                ->addColumn('action', function ($row) use ($token) {
+                    $html = '<a href="employees/'.$row->id.'" class="btn btn-xs btn-secondary">Show</a> ';
+                    $html .= '<a href="employees/'.$row->id.'/edit?company_id='.$row->company->id.'" class="btn btn-xs btn-secondary">Edit</a> ';
+                    $html .= '<a href="#" id="destroy-item-'.$row->id.'" data-url="employees/'.$row->id.'" data-token="'.$token.'" class="btn btn-xs btn-danger" onclick="destroyItem('.$row->id.')">Del</a>';
+                    return $html;
+                })->toJson();
+        }
+
+        return view('employees.index');
     }
 
     /**

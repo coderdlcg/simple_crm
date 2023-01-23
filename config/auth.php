@@ -16,6 +16,7 @@ return [
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
+        'register' => env('APP_USER_REGISTER', true),
     ],
 
     /*

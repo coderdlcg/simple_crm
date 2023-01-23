@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Company edit') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('companies.update', $company) }}">
+                        <form method="POST" action="{{ route('companies.update', $company) }}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
 
@@ -82,11 +82,23 @@
                             <div class="form-group row">
                                 <label for="logo-company" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
 
+                                @if ($company->logo)
+                                    <img src="{{ $company->logo }}" alt="Logo {{ $company->name }}" width="100" height="100">
+                                @else
+                                    No logo
+                                @endif
+
                                 <div class="col-md-6">
                                     <input id="logo-company"
                                            type="file"
-                                           class="form-control-file"
+                                           class="form-control-file @error('logo') is-invalid @enderror"
                                            name="logo">
+
+                                    @error('logo')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
 

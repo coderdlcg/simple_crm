@@ -12,7 +12,13 @@
                     <div class="card-body">
                         <p><b>Email</b>: {{ $company->email }}</p>
                         <p><b>Address</b>: {{ $company->address }}</p>
-                        <p><b>Logo</b>: {{ $company->logo }}</p>
+                        <p><b>Logo</b>:
+                            @if ($company->logo)
+                            <img src="{{ $company->logo }}" alt="Logo {{ $company->name }}" width="100" height="100">
+                            @else
+                                No logo
+                            @endif
+                        </p>
 
                         <div class="geomap">
                             @if ($company->coordinates)

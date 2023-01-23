@@ -54,9 +54,10 @@ class CompanyController extends Controller
             'name' => ['required', 'string', 'min:4', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:companies'],
             'address' => ['required', 'string', 'max:255'],
+            'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=300,max_height=300',
         ]);
 
-        $data = $request->except('logo', '_token');
+        $data = $request->except('_token');
 
         $params = [
             'geocode' => $data['address'], // адрес (город, улица, номер дома)
@@ -76,7 +77,19 @@ class CompanyController extends Controller
             ]);
         }
 
-        Company::create($data);
+        $company = Company::create($data);
+
+        if($company && $request->hasFile('logo')){
+            $url_store = '/uploads/companies/'.$company->id.'/';
+
+            $logo = $request->file('logo');
+            $logo_name = 'logo.'. $logo->getClientOriginalExtension();
+            $logo_save = public_path($url_store);
+            $logo->move($logo_save, $logo_name);
+
+            $company->logo = $url_store . $logo_name;
+            $company->save();
+        }
 
         return redirect(route('companies.index'));
     }
@@ -146,9 +159,21 @@ class CompanyController extends Controller
             'name' => ['required', 'string', 'min:4', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:companies,email,'.$id],
             'address' => ['required', 'string', 'max:255'],
+            'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=300,max_height=300',
         ]);
 
-        $data = $request->except('logo', '_token', '_method');
+        if($request->hasFile('logo')){
+            $url_store = '/uploads/companies/'.$id.'/';
+
+            $logo = $request->file('logo');
+            $logo_name = 'logo.'. $logo->getClientOriginalExtension();
+            $logo_save = public_path($url_store);
+            $logo->move($logo_save, $logo_name);
+
+            $data['logo'] =  $url_store . $logo_name;
+        }
+
+        $data = $request->except('_token', '_method');
 
         $company = Company::find($id);
         if (!$company) {

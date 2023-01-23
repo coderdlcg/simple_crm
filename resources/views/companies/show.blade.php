@@ -13,6 +13,15 @@
                         <p><b>Email</b>: {{ $company->email }}</p>
                         <p><b>Address</b>: {{ $company->address }}</p>
                         <p><b>Logo</b>: {{ $company->logo }}</p>
+
+                        <div class="geomap">
+                            @if ($company->coordinates)
+                                <p><b>Map</b>:</p>
+                                @include('components.yandexmap')
+                            @else
+                                <p><b>Map</b>: No map</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

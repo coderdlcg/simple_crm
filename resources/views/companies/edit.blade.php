@@ -68,6 +68,14 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+
+                                    <div class="geomap">
+                                        @if ($company->coordinates)
+                                            @include('components.yandexmap')
+                                        @else
+                                            No map
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
 

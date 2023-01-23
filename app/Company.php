@@ -12,7 +12,7 @@ class Company extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'logo', 'address',
+        'name', 'email', 'logo', 'address', 'coordinates',
     ];
 
 
